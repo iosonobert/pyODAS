@@ -1,0 +1,183 @@
+; Rolf Lueck, 2010-12-02
+;For Ming Feng VMP200 SN050, 2012-04-16 by Dave Cronkrite
+; 2012-05-22, Modified by Rolf Lueck in Perth.
+; 2017-03-30, Modified by CBluteau to reflect the 2x shear probes & 2xFP07 used
+rate=512
+prefix=uwa_
+disk=c:/data
+recsize=1
+profile=vertical
+no-fast=6
+no-slow=2
+
+[matrix]
+num_rows=8
+row01=	255	0	1	2	5	7	8	9
+row02=	32	40	1	2	5	7	8	9
+row03=	41	42	1	2	5	7	8	9
+row04=	4	6	1	2	5	7	8	9	
+row05=	10	11	1	2	5	7	8	9
+row06=	12	0	1	2	5	7	8	9
+row07=	0	0	1	2	5	7	8	9
+row08=	4	6	1	2	5	7	8	9
+
+[cruise_info]
+ship=Solander
+instrument=VMP-200
+SN=050
+owner=Ming Feng
+institute=UWA
+location=Browse
+cruise=KISSME
+operator=Cynthia Bluteau
+
+
+[gnd1]
+id=0
+type=gnd
+name=Gnd
+coef0=0
+
+[pitch]
+id=1
+type=accel
+name=Ax
+coef0=0
+coef1=1
+
+[roll]
+type=accel
+id=2
+name=Ay
+coef0=0
+coef1=1
+
+
+
+[shear1]
+id=8
+type=shear
+SN=M1624
+name=sh1
+diff_gain=0.94
+sens=0.0861
+adc_fs=4.096
+adc_bits=16
+
+
+[shear2]
+id=9
+name=sh2
+type=shear
+diff_gain=0.95
+SN=M1636
+sens=0.0817
+adc_fs=4.096
+adc_bits=16
+
+[therm1]
+id=4
+type=therm
+name=T1
+adc_fs=4.096
+adc_bits=16
+a=-4.7
+b=0.99849
+G=6
+E_B=0.68235
+; Specific to the FP07 used
+SN=T1303
+beta=3071.06
+T_0=282.150
+units=[degC]
+
+[dtherm1]
+id=5
+type=therm
+name=T1_dT1
+diff_gain=0.95
+
+
+[genvoltage0]
+id=32
+type=voltage
+name=V_Bat
+adc_bits=16
+adc_fs=4.096
+G=0.1
+units=[V]
+
+[pres]
+id=10
+type=poly
+name=P
+coef0=-2.37817
+coef1=0.053084
+coef2=0
+coef3=0
+units=[dBar]
+
+[dpres]
+id=11
+type=poly
+name=P_dP
+diff_gain=20.2
+
+[incl_x]
+id=40
+type=inclxy
+name=Incl_X
+coef0=0
+coef1=0.025
+units=[deg]
+
+[incl_y]
+id=41
+type=inclxy
+name=Incl_Y
+coef0=0
+coef1=0.025
+units=[deg]
+
+[incl_t]
+id=42
+type=inclt
+name=Incl_T
+coef0=624
+coef1=-0.47
+units=[degC]
+
+[genpoly0]
+id=12
+type=poly
+name=PV
+coef0=4.096
+coef1=1.25e-4
+coef2=0
+coef3=0
+units=[V]
+
+; redundant/additional FP07
+[therm2]
+id=6
+type=therm
+name=T2
+adc_fs=4.096
+adc_bits=16
+a=-16
+b=0.99858
+G=6
+E_B=0.68226
+; used the Fp07 that was moored during T-tide as a redundant FP07
+SN=T938
+beta=3048.11
+T_0=290.008
+units=[degC]
+
+[dtherm2]
+id=7
+type=therm
+name=T2_dT2
+diff_gain=0.92
+
+

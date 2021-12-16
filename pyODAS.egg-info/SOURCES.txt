@@ -1,0 +1,7 @@
+README.md
+setup.py
+pyODAS.egg-info/PKG-INFO
+pyODAS.egg-info/SOURCES.txt
+pyODAS.egg-info/dependency_links.txt
+pyODAS.egg-info/requires.txt
+pyODAS.egg-info/top_level.txt
