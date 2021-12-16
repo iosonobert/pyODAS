@@ -2,6 +2,8 @@
 
 Incomplete attempted translation of some of Rockland Scientific's ODAS features to python. As described in greater detail below, pyODAS is a bit of a misnomer, as it only attempts to read VMP files (with FP07s and Shear probes) and convert to physical units. Anyone else want to code the rest? 
 
+A link to a private repo for RSIs original ODAS is [here ](https://github.com/iosonobert/ODAS_Matlab). Sorry that this is private - I don't have permission to distribute RSI code. 
+
 ## Functions
 
 Tested on latest version:
