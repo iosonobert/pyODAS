@@ -10,7 +10,7 @@ eol = '\r\n'
 bytes_per_word = 2
 speed_cutout = 0.05
 vehicle = 'vmp'
-verbose = 1
+verbose = False
 
 def read_p(fn):
     
@@ -200,7 +200,8 @@ def cfg_find_channels(config_string):
     config_string_lines = cfg_read_str(config_string)
 
     tags =  [config_string_lines[n] for n in section_tags[0:-1]]
-    print(tags) 
+    if verbose:
+        print(tags) 
     
     channels = []
     for tag in tags:
@@ -296,11 +297,13 @@ def calibrate(section_dict):
         
         coef_found = False
         for n in range(0, 10):
-            print('{0:02.0f}'.format(n))
+            if verbose:
+                print('{0:02.0f}'.format(n))
             try:
                 coeff = float(section_dict['coef{0:01.0f}'.format(n)])
                 if coeff == 0:
-                    print('coeff{0:01.0f} is zero, skipping'.format(n))
+                    if verbose:
+                        print('coeff{0:01.0f} is zero, skipping'.format(n))
                     continue
                 
                 if verbose:
@@ -567,8 +570,23 @@ def main(fn, ini_file='./default_vehicle_attributes.ini'):
     
     output = {}
     output['channels'] = channels
+    output['header'] = header
     output['config_string'] = config_string
     
+    output['year']        = header[3]
+    output['month']       = header[4]
+    output['day']         = header[5]
+    output['hour']        = header[6]
+    output['minute']      = header[7]
+    output['second']      = header[8]
+    output['millisecond'] = header[9]
+
+    output['fs_slow'] = fs_slow
+    output['fs_fast'] = fs_fast
+
+    output['t_slow'] = t_slow
+    output['t_fast'] = t_fast
+
     output['all_indices'] = all_indices
     output['all_vectors'] = all_vectors
     output['all_times'] = all_times
@@ -597,25 +615,31 @@ def main(fn, ini_file='./default_vehicle_attributes.ini'):
         
         section_dict = output[section_name]
         if not 'diff_gain' in section_dict.keys():
-            print("{0} has no diff_gain property, skippping".format(section_name))
+            if verbose:
+                print("{0} has no diff_gain property, skippping".format(section_name))
             continue
         
         if section_dict['type'] == 'shear' or section_dict['type'] == 'xmp_shear':
-            print("{0} is a shear measurement, skippping".format(section_name))
+            if verbose:
+                print("{0} is a shear measurement, skippping".format(section_name))
             continue
         
         res = re.match('(.*)_d(.*?)', section_name)
         if res:
-            print("{0} is a fast column".format(section_name))
+            if verbose:
+                print("{0} is a fast column".format(section_name))
             would_be_slow_name = res.groups()[0]
         else:
-            print("{0} is not a fast column, skipping".format(section_name))
+            if verbose:
+                print("{0} is not a fast column, skipping".format(section_name))
             continue
                     
         if would_be_slow_name in section_names:
-            print("{0} has a non-preemphasised column, deconvolve".format(section_name))
+            if verbose:
+                print("{0} has a non-preemphasised column, deconvolve".format(section_name))
         else:
-            print("{0} has no non-preemphasised column, skipping for now but this is still possible to process".format(section_name))
+            if verbose:
+                print("{0} has no non-preemphasised column, skipping for now but this is still possible to process".format(section_name))
             continue
         
         id_here = int(section_dict['id'])
@@ -634,7 +658,8 @@ def main(fn, ini_file='./default_vehicle_attributes.ini'):
         section_dict = output[section_name]
         try:
             section_dict = calibrate(section_dict)
-            print('Calibrated {0}'.format(section_name))
+            if verbose:
+                print('Calibrated {0}'.format(section_name))
             
         except:
 #             raise(Exception)
@@ -653,10 +678,10 @@ def main(fn, ini_file='./default_vehicle_attributes.ini'):
         fast_name = res.groups()[0] + '_fast'
         slow_name = res.groups()[0] + '_slow'
         
-        print(output)
-        print(output[section_name])
-        print(section_name)
-        print(output[section_name].keys())
+        # print(output)
+        # print(output[section_name])
+        # print(section_name)
+        # print(output[section_name].keys())
         
         hres_col = output[section_name]['data_physical']
         fast_col = interp1d_opt(t_fast, hres_col)
